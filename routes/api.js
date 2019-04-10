@@ -115,17 +115,6 @@ router.get('/audios/:audio', checkToken, function (req, res, next) {
 
 // **************************** POSTS ****************************
 
-router.post('/radioGrill/:date', checkToken, function(req, res, next){
-  const date = req.params.date;
-  const path = "public/jsons/" + date ;
-
-  if(date && date !== '' && fs.existsSync(path)){
-
-  }else {
-
-  }
-});
-
 router.post('/json', checkToken, fileUpload.single('file'), function (req, res, next) {
   res.send("JSON guardado correctamente");
   res.end();
