@@ -2,6 +2,7 @@ const express       = require('express');
 const router        = express.Router();
 const fs            = require('fs');
 const nconf         = require('nconf');
+const multer     = require('multer');
 
 
 function checkToken (req, res, next) {
@@ -13,8 +14,26 @@ function checkToken (req, res, next) {
   next();
 }
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const jsons = 'public/jsons'
+        if (!fs.existsSync(jsons)) {
+            fs.mkdirSync(jsons);
+        }
+        cb(null, jsons);
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const fileUpload = multer({
+    storage: storage,
+    limits: { fileSize: 25 * Math.pow(1024, 2) }
+});
+
 router.get('/', checkToken, function(req, res, next){
-  res.send("Bienvenido al servidor de almacenamiento de Campus Sur Radio");
+  res.render('api', {title: "CSR Storage", content: "Bienvenido al servidor de almacenamiento de Campus Sur Radio", smallMsg: "¡Parece que tu token es correcto! :)"});
 });
 
 
@@ -91,6 +110,25 @@ router.get('/audios/:audio', checkToken, function (req, res, next) {
     res.writeHead(200, header);
     fs.createReadStream(path).pipe(res);
   }
+});
+
+
+// **************************** POSTS ****************************
+
+router.post('/radioGrill/:date', checkToken, function(req, res, next){
+  const date = req.params.date;
+  const path = "public/jsons/" + date ;
+
+  if(date && date !== '' && fs.existsSync(path)){
+
+  }else {
+
+  }
+});
+
+router.post('/json', checkToken, fileUpload.single('file'), function (req, res, next) {
+  res.send("JSON guardado correctamente");
+  res.end();
 });
 
 
