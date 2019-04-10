@@ -1,5 +1,61 @@
 extends layout
 
 block content
-  h1= title
-  p= content
+  h1.center= title
+  p.center= content
+  br
+  hr
+  br
+  h1 API para enviar contenido a la aplicación de Campus Sur Radio (Android)
+  p
+    | Es necesario incluir el apiToken en la cabecera de cada una de las llamadas a la API
+  p
+    b token: "secret-token"
+    br
+    br
+    | Puedes comprobar tu token con GET: '/api'
+  br
+  h2 Funciones GET
+  h3 Obtener parrilla de radio
+  p
+    b GET:
+    |  '/api/radioGrill'
+  p  Devuelve un JSON con la parrilla de radio del mes actual
+  br
+  br
+  h3 Obtener streaming de vídeo
+  p
+    b GET:
+    |  '/api/videos/:video_name'   
+    b *
+    | En
+    b "video_name"
+    |  debe ir el nombre del vídeo proporcionado en el JSON de radioGrill
+  p  Devuelve el vídeo en streaming, en formato MP4
+  br
+  br
+  h3 Obtener streaming de audio
+  p
+    b GET:
+    |  '/api/audios/:audio_name'   
+    b *
+    | En
+    b "audio_name"
+    |  debe ir el nombre del audio proporcionado en el JSON de radioGrill
+  p  Devuelve el audio en streaming, en formato MP3
+  br
+  br
+  h2 Funciones POST
+  h3 Guardar JSON para parrilla
+  p
+    b POST:
+    |  '/api/json'
+  p
+    | Se debe enviar el "YYYY_MM.json" en el body con el nombre en formato YYYY_MM.json indicando el año y el mes para el que es válido
+    br
+    | El valor del campo del formulario en el que va el fichero debe ser "file" (sin comillas).
+    br
+    | El fichero json debe seguir el formato del fichero de ejemplo incluido en este repositorio: "2019_04(ejemplo).json"
+  br
+  br
+

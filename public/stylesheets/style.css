@@ -1,8 +1,26 @@
 body {
+  background-color: floralwhite;
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.center {
+  text-align: center;
+}
+
+.headerImage {
+  align-self: center;
+  height: 50px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
+}
+
+.headerImage {
+  padding-bottom: 50px;
 }
