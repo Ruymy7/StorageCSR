@@ -31,7 +31,7 @@ router.get('/radioGrill', checkToken, function (req, res, next) {
   }
 });
 
-router.get('/videos/:video', function (req, res, next) {
+router.get('/videos/:video', checkToken,  function (req, res, next) {
   const video = req.params.video;
   const path = "public/videos/" + video;
 
@@ -62,7 +62,7 @@ router.get('/videos/:video', function (req, res, next) {
   }
 });
 
-router.get('/audios/:audio', function (req, res, next) {
+router.get('/audios/:audio', checkToken, function (req, res, next) {
   const audio = req.params.audio;
   const path = "public/audios/" + audio;
 
@@ -92,11 +92,6 @@ router.get('/audios/:audio', function (req, res, next) {
     fs.createReadStream(path).pipe(res);
   }
 });
-
-// router.post('/videoList', checkToken, function(req, res, next){
-//   const list = req.body.list;
-//   fs.linkSync();
-// });
 
 
 module.exports = router;
