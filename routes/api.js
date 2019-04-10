@@ -32,6 +32,8 @@ const fileUpload = multer({
     limits: { fileSize: 25 * Math.pow(1024, 2) }
 });
 
+// **************************** GETS ****************************
+
 router.get('/', checkToken, function(req, res, next){
   res.render('api', {title: "CSR Storage", content: "Bienvenido al servidor de almacenamiento de Campus Sur Radio", smallMsg: "¡Parece que tu token es correcto! :)"});
 });
