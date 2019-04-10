@@ -24,5 +24,5 @@
 <h3>Guardar JSON para parrilla</h3>
 <p> <b>POST:</b> '/json' </p>
 <p>Se debe enviar el "YYYY_MM.json" en el body con el nombre en formato YYYY_MM.json indicando el año y el mes para el que es válido</p>
-<p>El valor del campo del formulario en el que va el fichero debe ser "file" (sin comillas) </p>
+<p>El valor del campo del formulario en el que va el fichero debe ser "file" (sin comillas). <br>El fichero json debe seguir el formato del fichero de ejemplo incluido en este repositorio: "2019_04(ejemplo).json"</p>
 <br><br>
