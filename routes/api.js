@@ -14,22 +14,56 @@ function checkToken (req, res, next) {
   next();
 }
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const jsons = 'public/jsons'
-        if (!fs.existsSync(jsons)) {
-            fs.mkdirSync(jsons);
-        }
-        cb(null, jsons);
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
+const jsonStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const jsons = 'public/jsons';
+    if (!fs.existsSync(jsons)) {
+        fs.mkdirSync(jsons);
     }
+    cb(null, jsons);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
 });
 
-const fileUpload = multer({
-    storage: storage,
-    limits: { fileSize: 25 * Math.pow(1024, 2) }
+const jsonUpload = multer({
+    storage: jsonStorage
+});
+
+
+const videoStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const videos = 'public/videos';
+    if(!fs.existsSync(videos)){
+      fs.mkdirSync(videos);
+    }
+    cb(null, videos);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+const videoUpload = multer({
+  storage: videoStorage
+});
+
+const audioStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const audios = 'public/audios';
+    if(!fs.existsSync(audios)){
+      fs.mkdirSync(audios);
+    }
+    cb(null, audios);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+const audioUpload = multer({
+  storage: audioStorage
 });
 
 // **************************** GETS ****************************
@@ -117,8 +151,18 @@ router.get('/audios/:audio', checkToken, function (req, res, next) {
 
 // **************************** POSTS ****************************
 
-router.post('/json', checkToken, fileUpload.single('file'), function (req, res, next) {
+router.post('/json', checkToken, jsonUpload.single('file'), function (req, res, next) {
   res.send("JSON guardado correctamente");
+  res.end();
+});
+
+router.post('/video', checkToken, videoUpload.single('video'), function (req, res, next) {
+  res.send("Video guardado correctamente");
+  res.end();
+});
+
+router.post('/audio', checkToken, audioUpload.single('audio'), function (req, res, next) {
+  res.send("Audio guardado correctamente");
   res.end();
 });
 
