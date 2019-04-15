@@ -66,6 +66,23 @@ const audioUpload = multer({
   storage: audioStorage
 });
 
+const thumbStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const thumb = 'public/thumbnails';
+    if(!fs.existsSync(thumb)){
+      fs.mkdirSync(thumb);
+    }
+    cb(null, thumb);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+const thumbUpload = multer({
+  storage: thumbStorage
+});
+
 // **************************** GETS ****************************
 
 router.get('/', checkToken, function(req, res, next){
@@ -84,6 +101,14 @@ router.get('/radioGrill', checkToken, function (req, res, next) {
   } else {
     res.json({error: "No grill for this month"});
   }
+});
+
+router.get('/thumbnails/:thumb', function (req, res, next) {
+  const thumb = req.params.thumb;
+  const path = "public/thumbnails/" + thumb;
+
+  const file = fs.createReadStream(path);
+  file.pipe(res);
 });
 
 router.get('/videos/:video', checkToken,  function (req, res, next) {
@@ -163,6 +188,11 @@ router.post('/video', checkToken, videoUpload.single('video'), function (req, re
 
 router.post('/audio', checkToken, audioUpload.single('audio'), function (req, res, next) {
   res.send("Audio guardado correctamente");
+  res.end();
+});
+
+router.post('/thumbnails', checkToken, thumbUpload.single('thumb'), function (req, res, next) {
+  res.send("Imagen guardada correctamente");
   res.end();
 });
 

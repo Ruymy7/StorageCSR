@@ -4,8 +4,8 @@
   "categories": [
     {
       "name": "Videos",
-      "mp4":"127.0.0.1:2019/videos/",
-      "images":"127.0.0.1:2019/thumbnails/",
+      "mp4":"127.0.0.1:2019/api/videos/",
+      "images":"127.0.0.1:2019/api/thumbnails/",
       "videos": [
         {
           "subtitle": "Podcast de prueba de vídeo",
@@ -27,8 +27,8 @@
     },
     {
       "name": "audios",
-      "mp3":"127.0.0.1:2019/audios/",
-      "images":"127.0.0.1:2019/thumbnails/",
+      "mp3":"127.0.0.1:2019/api/audios/",
+      "images":"127.0.0.1:2019/api/thumbnails/",
       "audios": [
         {
           "subtitle": "Podcast de prueba de audio",

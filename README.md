@@ -2,6 +2,7 @@
 <p> Es necesario incluir el apiToken en la cabecera de cada una de las llamadas a la API</p>
 <p><b>token: "secret-token"</b><br><br>Puedes comprobar tu token con GET: '/api'</p> <br>
 
+<hr>
 <h2>Funciones GET</h2>
 <h3>Obtener parrilla de radio</h3>
 <p> <b>GET:</b> '/api/radioGrill' </p>
@@ -20,6 +21,12 @@
 <p> Devuelve el audio en streaming, en formato MP3 </p>
 <br><br>
 
+<h3>Obtener imagen
+<p> <b>GET:</b> '/api/thumbnails/:image_name'&nbsp;&nbsp;&nbsp;
+<b>*</b>En <b>"image_name"</b> debe ir el nombre de la imagen proporcionado en el JSON de radioGrill</p>
+<br><br>
+
+<hr>
 <h2>Funciones POST</h2>
 <h3>Guardar JSON para parrilla</h3>
 <p> <b>POST:</b> '/api/json' </p>
@@ -37,4 +44,10 @@ El nombre del vídeo debe ser el que se indique en el JSON de la parrilla.</p>
 <p> <b>POST:</b> '/api/audio' </p>
 <p>Se debe enviar el vídeo que se desea guardar en el body. <br> El valor del campo del formulario en el que va el vídeo debe ser "audio" (sin comillas).<br>
 El nombre del audio debe ser el que se indique en el JSON de la parrilla.</p>
+<br>
+
+<h3>Guardar imagen</h2>
+<p> <b>POST:</b> '/api/thumbnails' </p>
+<p>Se debe enviar la imagen que se desea guardar en el body. <br> El valor del campo del formulario en el que va la imagen debe ser "thumb" (sin comillas).<br>
+El nombre de la imagen debe ser el que se indique en el JSON de la parrilla.</p>
 <br>

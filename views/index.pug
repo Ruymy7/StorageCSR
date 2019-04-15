@@ -1,12 +1,7 @@
 extends layout
 
 block content
-  h1.center= title
-  p.center= content
-  br
-  hr
-  br
-  h1 API para enviar contenido a la aplicación de Campus Sur Radio (Android)
+  h1 API para enviar contenido a la Aplicación de Campus Sur Radio (Android)
   p
     | Es necesario incluir el apiToken en la cabecera de cada una de las llamadas a la API
   p
@@ -15,6 +10,7 @@ block content
     br
     | Puedes comprobar tu token con GET: '/api'
   br
+  hr
   h2 Funciones GET
   h3 Obtener parrilla de radio
   p
@@ -29,7 +25,7 @@ block content
     |  '/api/videos/:video_name'   
     b *
     | En
-    b "video_name"
+    b  "video_name"
     |  debe ir el nombre del vídeo proporcionado en el JSON de radioGrill
   p  Devuelve el vídeo en streaming, en formato MP4
   br
@@ -40,22 +36,65 @@ block content
     |  '/api/audios/:audio_name'   
     b *
     | En
-    b "audio_name"
+    b  "audio_name"
     |  debe ir el nombre del audio proporcionado en el JSON de radioGrill
   p  Devuelve el audio en streaming, en formato MP3
   br
   br
+  h3 Obtener imagen
+  p
+    b GET:
+    |  '/api/thumbnails/:image_name'   
+    b *
+    | En
+    b  "image_name"
+    |  debe ir el nombre de la imagen proporcionado en el JSON de radioGrill
+  br
+  br
+  hr
   h2 Funciones POST
   h3 Guardar JSON para parrilla
   p
     b POST:
     |  '/api/json'
   p
-    | Se debe enviar el "YYYY_MM.json" en el body con el nombre en formato YYYY_MM.json indicando el año y el mes para el que es válido
+    | Se debe enviar el "YYYY_MM.json" en el body con el nombre en formato YYYY_MM.json indicando el año y el mes para el que es válido.
     br
     | El valor del campo del formulario en el que va el fichero debe ser "file" (sin comillas).
     br
     | El fichero json debe seguir el formato del fichero de ejemplo incluido en este repositorio: "2019_04(ejemplo).json"
   br
+  h3 Guardar vídeo
+  p
+    b POST:
+    |  '/api/video'
+  p
+    | Se debe enviar el vídeo que se desea guardar en el body.
+    br
+    |  El valor del campo del formulario en el que va el vídeo debe ser "video" (sin comillas).
+    br
+    | El nombre del vídeo debe ser el que se indique en el JSON de la parrilla.
+  br
+  h3 Guardar audio
+  p
+    b POST:
+    |  '/api/audio'
+  p
+    | Se debe enviar el vídeo que se desea guardar en el body.
+    br
+    |  El valor del campo del formulario en el que va el vídeo debe ser "audio" (sin comillas).
+    br
+    | El nombre del audio debe ser el que se indique en el JSON de la parrilla.
+  br
+  h3 Guardar imagen
+  p
+    b POST:
+    |  '/api/thumbnails'
+  p
+    | Se debe enviar la imagen que se desea guardar en el body.
+    br
+    |  El valor del campo del formulario en el que va la imagen debe ser "thumb" (sin comillas).
+    br
+    | El nombre de la imagen debe ser el que se indique en el JSON de la parrilla.
   br
 
