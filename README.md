@@ -21,7 +21,7 @@
 <p> Devuelve el audio en streaming, en formato MP3 </p>
 <br><br>
 
-<h3>Obtener imagen
+<h3>Obtener imagen</h3>
 <p> <b>GET:</b> '/api/thumbnails/:image_name'&nbsp;&nbsp;&nbsp;
 <b>*</b>En <b>"image_name"</b> debe ir el nombre de la imagen proporcionado en el JSON de radioGrill</p>
 <br><br>
@@ -34,19 +34,19 @@
 El valor del campo del formulario en el que va el fichero debe ser "file" (sin comillas). <br>El fichero json debe seguir el formato del fichero de ejemplo incluido en este repositorio: "2019_04(ejemplo).json"</p>
 <br>
 
-<h3>Guardar vídeo</h2>
+<h3>Guardar vídeo</h3>
 <p> <b>POST:</b> '/api/video' </p>
 <p>Se debe enviar el vídeo que se desea guardar en el body. <br> El valor del campo del formulario en el que va el vídeo debe ser "video" (sin comillas).<br>
 El nombre del vídeo debe ser el que se indique en el JSON de la parrilla.</p>
 <br>
 
-<h3>Guardar audio</h2>
+<h3>Guardar audio</h3>
 <p> <b>POST:</b> '/api/audio' </p>
 <p>Se debe enviar el vídeo que se desea guardar en el body. <br> El valor del campo del formulario en el que va el vídeo debe ser "audio" (sin comillas).<br>
 El nombre del audio debe ser el que se indique en el JSON de la parrilla.</p>
 <br>
 
-<h3>Guardar imagen</h2>
+<h3>Guardar imagen</h3>
 <p> <b>POST:</b> '/api/thumbnails' </p>
 <p>Se debe enviar la imagen que se desea guardar en el body. <br> El valor del campo del formulario en el que va la imagen debe ser "thumb" (sin comillas).<br>
 El nombre de la imagen debe ser el que se indique en el JSON de la parrilla.</p>
