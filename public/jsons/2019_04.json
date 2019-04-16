@@ -4,11 +4,11 @@
   "categories": [
     {
       "name": "Videos",
-      "mp4":"127.0.0.1:2019/api/videos/",
-      "images":"127.0.0.1:2019/api/thumbnails/",
+      "mp4":"http://127.0.0.1:2019/api/videos/",
+      "images":"http://127.0.0.1:2019/api/thumbnails/",
       "videos": [
         {
-          "subtitle": "Podcast de prueba de vÃ­deo",
+          "subtitle": "Podcast de prueba de vídeo",
           "sources": [
             {
               "type": "mp4",
@@ -16,33 +16,10 @@
               "url": "2019_04_15_01.mp4"
             }
           ],
-          "thumb": "thumb.jpg",
+          "image": "thumb.jpg",
           "image-480x270": "thumb.jpg",
           "image-780x1200": "thumb.jpg",
-          "title": "Podcats de vÃ­deo",
-          "studio": "Campus Sur Radio",
-          "duration" : 127
-        }
-      ]
-    },
-    {
-      "name": "audios",
-      "mp3":"127.0.0.1:2019/api/audios/",
-      "images":"127.0.0.1:2019/api/thumbnails/",
-      "audios": [
-        {
-          "subtitle": "Podcast de prueba de audio",
-          "sources": [
-            {
-              "type": "mp3",
-              "mime": "audios/mp3",
-              "url": "2019_04_15_01.mp3"
-            }
-          ],
-          "thumb": "thumb.jpg",
-          "image-480x270": "thumb.jpg",
-          "image-780x1200": "thumb.jpg",
-          "title": "Podcast de audio",
+          "title": "Podcats de vídeo",
           "studio": "Campus Sur Radio",
           "duration" : 127
         }

@@ -1,5 +1,5 @@
 <h1>API para enviar contenido a la Aplicación de Campus Sur Radio (Android)</h1>
-<p> Es necesario incluir el apiToken en la cabecera de cada una de las llamadas a la API</p>
+<p> Es necesario incluir el apiToken en la cabecera de cada una de las llamadas POST a la API</p>
 <p><b>token: "secret-token"</b><br><br>Puedes comprobar tu token con GET: '/api'</p> <br>
 
 <hr>
