@@ -18,8 +18,8 @@
           ],
           "image": "thumb.jpg",
           "image-480x270": "thumb.jpg",
-          "image-780x1200": "thumb.jpg",
-          "title": "Podcats de vídeo",
+          "image-780x1200": "thumb780.jpg",
+          "title": "Podcast de vídeo",
           "studio": "Campus Sur Radio",
           "duration" : 127
         }
