@@ -22,6 +22,22 @@
           "title": "Podcast de vídeo",
           "studio": "Campus Sur Radio",
           "duration" : 127
+        },
+        {
+          "subtitle": "Podcast de prueba de vídeo 2",
+          "sources": [
+            {
+              "type": "mp4",
+              "mime": "videos/mp4",
+              "url": "2019_04_15_01.mp4"
+            }
+          ],
+          "image": "thumb.jpg",
+          "image-480x270": "thumb.jpg",
+          "image-780x1200": "thumb780.jpg",
+          "title": "Podcast de vídeo 2",
+          "studio": "Campus Sur Radio",
+          "duration" : 127
         }
       ]
     }
