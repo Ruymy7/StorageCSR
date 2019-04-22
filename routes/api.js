@@ -104,72 +104,87 @@ router.get('/radioGrill', function (req, res, next) {
 });
 
 router.get('/thumbnails/:thumb', function (req, res, next) {
-    const thumb = req.params.thumb;
-    const path = "public/thumbnails/" + thumb;
+    try{
+        const thumb = req.params.thumb;
+        const path = "public/thumbnails/" + thumb;
 
-    const file = fs.createReadStream(path);
-    file.pipe(res);
+        const file = fs.createReadStream(path);
+        file.pipe(res);
+    } catch (error) {
+        res.status(error.status || 404);
+        res.render('error', {error});
+    }
 });
 
 router.get('/videos/:video',  function (req, res, next) {
-    const video = req.params.video;
-    const path = "public/videos/" + video;
+    try {
+        const video = req.params.video;
+        const path = "public/videos/" + video;
 
-    const stat = fs.statSync(path);
-    const fileSize = stat.size;
-    const range = req.headers.range;
-    if (range) {
-        const parts = range.replace(/bytes=/, "").split("-");
-        const start = parseInt(parts[0], 10);
-        const end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
-        const chunkSize = (end-start)+1;
-        const file = fs.createReadStream(path, {start, end});
-        const head = {
-            'Content-Range': 'bytes ' + start + ' - ' + end + ' / ' + fileSize,
-            'Accept-Ranges': 'bytes',
-            'Content-Length': chunkSize,
-            'Content-Type': 'video/mp4',
-        };
-        res.writeHead(206, head);
-        file.pipe(res);
-    } else {
-        const header = {
-            'Content-Length': fileSize,
-            'Content-Type': 'video/mp4',
-        };
-        res.writeHead(200, header);
-        fs.createReadStream(path).pipe(res);
+        const stat = fs.statSync(path);
+        const fileSize = stat.size;
+        const range = req.headers.range;
+        if (range) {
+            const parts = range.replace(/bytes=/, "").split("-");
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
+            const chunkSize = (end-start)+1;
+            const file = fs.createReadStream(path, {start, end});
+            const head = {
+                'Content-Range': 'bytes ' + start + ' - ' + end + ' / ' + fileSize,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunkSize,
+                'Content-Type': 'video/mp4',
+            };
+            res.writeHead(206, head);
+            file.pipe(res);
+        } else {
+            const header = {
+                'Content-Length': fileSize,
+                'Content-Type': 'video/mp4',
+            };
+            res.writeHead(206, header);
+            fs.createReadStream(path).pipe(res);
+        }
+    } catch (error) {
+        res.status(error.status || 404);
+        res.render('error', {error});
     }
 });
 
 router.get('/audios/:audio', function (req, res, next) {
-    const audio = req.params.audio;
-    const path = "public/audios/" + audio;
+    try {
+        const audio = req.params.audio;
+        const path = "public/audios/" + audio;
 
-    const stat = fs.statSync(path);
-    const fileSize = stat.size;
-    const range = req.headers.range;
-    if (range) {
-        const parts = range.replace(/bytes=/, "").split("-");
-        const start = parseInt(parts[0], 10);
-        const end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
-        const chunkSize = (end-start)+1;
-        const file = fs.createReadStream(path, {start, end});
-        const head = {
-            'Content-Range': 'bytes ' + start + ' - ' + end + ' / ' + fileSize,
-            'Accept-Ranges': 'bytes',
-            'Content-Length': chunkSize,
-            'Content-Type': 'audio/mp3',
-        };
-        res.writeHead(206, head);
-        file.pipe(res);
-    } else {
-        const header = {
-            'Content-Length': fileSize,
-            'Content-Type': 'audio/mp3',
-        };
-        res.writeHead(200, header);
-        fs.createReadStream(path).pipe(res);
+        const stat = fs.statSync(path);
+        const fileSize = stat.size;
+        const range = req.headers.range;
+        if (range) {
+            const parts = range.replace(/bytes=/, "").split("-");
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
+            const chunkSize = (end-start)+1;
+            const file = fs.createReadStream(path, {start, end});
+            const head = {
+                'Content-Range': 'bytes ' + start + ' - ' + end + ' / ' + fileSize,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunkSize,
+                'Content-Type': 'audio/mp3',
+            };
+            res.writeHead(206, head);
+            file.pipe(res);
+        } else {
+            const header = {
+                'Content-Length': fileSize,
+                'Content-Type': 'audio/mp3',
+            };
+            res.writeHead(200, header);
+            fs.createReadStream(path).pipe(res);
+        }
+    } catch (error) {
+        res.status(error.status || 404);
+        res.render('error', {error});
     }
 });
 
