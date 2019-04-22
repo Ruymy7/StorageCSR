@@ -4,8 +4,8 @@
   "categories": [
     {
       "name": "Videos",
-      "mp4":"http://127.0.0.1:2019/api/videos/",
-      "images":"http://127.0.0.1:2019/api/thumbnails/",
+      "mp4":"http://csradio.ddns.net:2019/api/videos/",
+      "images":"http://csradio.ddns.net:2019/api/thumbnails/",
       "videos": [
         {
           "subtitle": "Podcast de prueba de vídeo",
