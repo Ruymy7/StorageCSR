@@ -1,0 +1,47 @@
+{
+  "categories": [
+    {
+      "name": "Videos",
+      "mp4":"http://csradio.ddns.net:2019/api/videos/",
+      "images":"http://csradio.ddns.net:2019/api/thumbnails/",
+      "videos": [
+        {
+          "start-timestamp": "1557853200000",
+          "end-timestamp": "1557856800000",
+          "subtitle": "Podcast de prueba de vídeo",
+          "sources": [
+            {
+              "type": "mp4",
+              "mime": "videos/mp4",
+              "url": "2019_05_15_01.mp4"
+            }
+          ],
+          "image": "thumb.jpg",
+          "image-480x270": "thumb.jpg",
+          "image-780x1200": "thumb780.jpg",
+          "title": "Podcast de vídeo",
+          "studio": "Campus Sur Radio",
+          "duration" : 127
+        },
+        {
+          "start-timestamp": "1557856800000",
+          "end-timestamp": "1557860400000",
+          "subtitle": "Podcast de prueba de vídeo 2",
+          "sources": [
+            {
+              "type": "mp4",
+              "mime": "videos/mp4",
+              "url": "2019_05_15_01.mp4"
+            }
+          ],
+          "image": "thumb.jpg",
+          "image-480x270": "thumb.jpg",
+          "image-780x1200": "thumb780.jpg",
+          "title": "Podcast de vídeo 2",
+          "studio": "Campus Sur Radio",
+          "duration" : 127
+        }
+      ]
+    }
+  ]
+}

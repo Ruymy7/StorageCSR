@@ -8,6 +8,8 @@
       "images":"127.0.0.1:2019/thumbnails/",
       "videos": [
         {
+          "start-timestamp": "1557853200000",
+          "end-timestamp": "1557856800000",
           "subtitle": "Podcast de prueba de vídeo",
           "sources": [
             {
@@ -31,6 +33,8 @@
       "images":"127.0.0.1:2019/thumbnails/",
       "audios": [
         {
+          "start-timestamp": "1557853200000",
+          "end-timestamp": "1557856800000",
           "subtitle": "Podcast de prueba de audio",
           "sources": [
             {

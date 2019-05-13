@@ -118,23 +118,35 @@ router.get('/thumbnails/:thumb', function (req, res, next) {
 
 router.get('/videos/:video',  function (req, res, next) {
     try {
+        //console.log(req.headers);
         const video = req.params.video;
         const path = "public/videos/" + video;
 
         const stat = fs.statSync(path);
         const fileSize = stat.size;
+        const lastModified = stat.mtime.toUTCString();
+        const mtime = stat.mtimeMs;
+        let now = new Date();
+        now.setHours(now.getHours() + 1);
+        now = now.toUTCString();
+
         const range = req.headers.range;
         if (range) {
             const parts = range.replace(/bytes=/, "").split("-");
             const start = parseInt(parts[0], 10);
-            const end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
-            const chunkSize = (end-start)+1;
+            let end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
+            let chunkSize = (end-start)+1;
             const file = fs.createReadStream(path, {start, end});
             const head = {
                 'Content-Range': 'bytes ' + start + ' - ' + end + ' / ' + fileSize,
                 'Accept-Ranges': 'bytes',
                 'Content-Length': chunkSize,
                 'Content-Type': 'video/mp4',
+                'Last-Modified': lastModified,
+                'etag': mtime,
+                'status': 206,
+                'cache-control': 'max-age=3600',
+                'Expires': now
             };
             res.writeHead(206, head);
             file.pipe(res);
@@ -142,8 +154,14 @@ router.get('/videos/:video',  function (req, res, next) {
             const header = {
                 'Content-Length': fileSize,
                 'Content-Type': 'video/mp4',
+                'Accept-Ranges': 'bytes',
+                'Last-Modified': lastModified,
+                'etag': mtime,
+                'status': 200,
+                'cache-control': 'max-age=3600',
+                'Expires': now
             };
-            res.writeHead(206, header);
+            res.writeHead(200, header);
             fs.createReadStream(path).pipe(res);
         }
     } catch (error) {
