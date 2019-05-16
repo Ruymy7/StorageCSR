@@ -2,7 +2,7 @@ const express       = require('express');
 const router        = express.Router();
 const fs            = require('fs');
 const nconf         = require('nconf');
-const multer     = require('multer');
+const multer        = require('multer');
 
 
 function checkToken (req, res, next) {
@@ -95,11 +95,15 @@ router.get('/radioGrill', function (req, res, next) {
     const mm = date.getMonth() < 10 ? "0" + (date.getMonth()+1) : date.getMonth();
     const yyyy = date.getFullYear();
     const path = "public/jsons/" + yyyy + "_" + mm + ".json";
-    if(fs.existsSync(path)){
-        const readStream = fs.createReadStream(path);
-        readStream.pipe(res);
-    } else {
-        res.json({error: "No grill for this month"});
+    try{
+        if(fs.existsSync(path)){
+            const json = fs.readFileSync(path);
+            res.send(json); res.end();
+        } else {
+            res.json({error: "No grill for this month"});
+        }
+    } catch (e) {
+        console.log('ERROR: ', e);
     }
 });
 
