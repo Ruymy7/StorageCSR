@@ -38,7 +38,7 @@ function xlsToJSON(filename, res) {
     xlsxj({
         input: path,
         output: path.replace(".xlsx", ".json"),
-        lowerCaseHeaders:true //converts excel header rows into lowercase as json keys
+        lowerCaseHeaders:true
     }, function(err, result) {
         if(err) {
             console.error(err);
@@ -46,6 +46,19 @@ function xlsToJSON(filename, res) {
             JSONtoGrill(result, filename, res);
         }
     });
+
+    /*const pathxls = 'public/xls/' + filename;
+    const pathtmpJSON = 'public/xls/' + filename.replace(".xlsx", ".json");
+    try{
+        if (fs.existsSync(pathxls))
+            fs.unlinkSync(pathxls);
+
+        if (fs.existsSync(pathtmpJSON))
+            fs.unlinkSync(pathtmpJSON);
+
+    } catch (e) {
+        console.log('ERROR: ', e);
+    }*/
 }
 
 function JSONtoGrill(json, filename, res) {
@@ -57,13 +70,13 @@ function JSONtoGrill(json, filename, res) {
                 "images": "http://csradio.ddns.net:2019/api/thumbnails/",
                 "videos": [ ]
             }
-            ,
+            /*,
             {
                 "name": "audios",
                 "mp3": "http://csradio.ddns.net:2019/api/audios/",
                 "images": "http://csradio.ddns.net:2019/api/thumbnails/",
                 "audios": [ ]
-            }
+            }*/
         ]
     };
 
@@ -112,21 +125,12 @@ function JSONtoGrill(json, filename, res) {
     });
 
     const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
-    const pathxls = 'public/xls/' + filename;
-    const pathtmpJSON = 'public/xls/' + filename.replace(".xlsx", ".json");
 
     try {
         const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
         fs.writeFileSync(path, str);
-        res.send(str); res.end();
-        if (fs.existsSync(pathxls))
-            fs.unlinkSync(pathxls);
-
-        if (fs.existsSync(pathtmpJSON))
-            fs.unlinkSync(pathtmpJSON);
-
     } catch (e) {
-        console.log('ERROR: ', e);
+        console.log(e);
     }
 }
 
@@ -145,6 +149,16 @@ router.post('/pull', checkAdminToken, function (req, res, next) {
 
 router.post('/addgrill', checkAdminToken, xlsUpload.single('file'), function(req, res, next) {
     xlsToJSON(req.file.filename, res);
+    res.end();
 });
 
+// ---------------- GETS ------------------
+
+router.get('/', function(req, res, next){
+    res.render('admin', {title: "CSR Administración"});
+});
+
+router.get('/addgrill', function(req, res, next){
+    res.render('admin', {title: "CSR Administración"});
+});
 module.exports = router;

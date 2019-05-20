@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h1 Subir un archivo con extensión .xlsx para la parrilla
+    p El nombre del archivo debe seguir el formato YYYY_MM.xlsx
+
+    .uploadContainer
+        h2 Seleccione un archivo
+        form#uploadFile(action='/admin/addgrill', method='post', enctype='multipart/form-data')
+            input(type='file', name='file' required)
+            input(type='submit')

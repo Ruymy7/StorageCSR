@@ -24,3 +24,23 @@ a {
 .headerImage {
   padding-bottom: 50px;
 }
+
+.adminButton {
+  text-align: center;
+}
+
+.uploadContainer {
+  display: block;
+  align-self: center;
+  width: 75%;
+  border: 1px solid rgba(0, 0, 0, 0.13);
+}
+.uploadContainer input {
+  padding: 10px;
+}
+.uploadContainer h2 {
+  padding: 10px;
+}
+.uploadContainer button {
+  margin: 10px;
+}

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" defaultCharsetForPropertiesFiles="ISO-8859-1">
-    <file url="file://$PROJECT_DIR$/public/jsons/2019_05.json" charset="ISO-8859-1" />
-    <file url="PROJECT" charset="ISO-8859-1" />
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/routes/admin.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/views/admin.pug" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/views/index.pug" charset="UTF-8" />
   </component>
 </project>
