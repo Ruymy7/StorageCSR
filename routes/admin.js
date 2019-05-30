@@ -66,22 +66,14 @@ function JSONtoGrill(json, filename, res) {
         "categories": [
             {
                 "name": "videos",
-                "mp4": "http://csradio.ddns.net:2019/api/videos/",
-                "images": "http://csradio.ddns.net:2019/api/thumbnails/",
-                "videos": [ ]
+                "mp4": "http://iaas92-43.cesvima.upm.es",
+                "images": "http://iaas92-43.cesvima.upm.es",
+                "videos": []
             }
-            /*,
-            {
-                "name": "audios",
-                "mp3": "http://csradio.ddns.net:2019/api/audios/",
-                "images": "http://csradio.ddns.net:2019/api/thumbnails/",
-                "audios": [ ]
-            }*/
         ]
     };
 
     json.forEach(function (element, i) {
-        if(element.Tipo_de_archivo === 'mp4') {
             const mp4Json = {
                 "start-timestamp": element.Timestamp_inicio,
                 "end-timestamp": element.Timestamp_final,
@@ -90,38 +82,17 @@ function JSONtoGrill(json, filename, res) {
                     {
                         "type": "mp4",
                         "mime": "videos/mp4",
-                        "url": element.Nombre_del_archivo
+                        "url": "/p/106/sp/0/playManifest/entryId/"+element.Nombre_del_archivo+"/format/url/flavorParamId/301951/video.mp4"
                     }
                 ],
-                "image": element.Miniatura,
-                "image-480x270": element.Miniatura,
-                "image-780x1200": element.Miniatura,
+                "image": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/480/height/200",
+                "image-480x270": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/350/height/270",
+                "image-780x1200": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/780/height/1200",
                 "title": element.Titulo,
                 "studio": element.Estudio,
                 "duration": element.Duracion
             };
             grill.categories[0].videos.push(mp4Json);
-        } else if(element.Tipo_de_archivo === 'mp3'){
-            const mp3Json = {
-                "start-timestamp": element.Timestamp_inicio,
-                "end-timestamp": element.Timestamp_final,
-                "subtitle": element.Subtitulo,
-                "sources": [
-                    {
-                        "type": "mp3",
-                        "mime": "videos/mp3",
-                        "url": element.Nombre_del_archivo
-                    }
-                ],
-                "image": element.Miniatura,
-                "image-480x270": element.Miniatura,
-                "image-780x1200": element.Miniatura,
-                "title": element.Titulo,
-                "studio": element.Estudio,
-                "duration": element.Duracion
-            };
-            grill.categories[1].audios.push(mp3Json);
-        }
     });
 
     const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
