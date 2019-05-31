@@ -99,6 +99,9 @@ function JSONtoGrill(json, filename, res) {
                             fs.mkdirSync('public/jsons/');
                             const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
                             fs.writeFileSync(path, str);
+                        } else {
+                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
+                            fs.writeFileSync(path, str);
                         }
                     } catch (e) {
                         console.log(e);
