@@ -118,7 +118,7 @@ function JSONtoGrill(json, filename, res) {
 // ---------------- POSTS ------------------
 
 router.post('/pull', checkAdminToken, function (req, res, next) {
-    exec('git pull', (error, stdout, stderr) => {
+    exec('git pull && pm2 restart app', (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
             res.send('Error: ' + error);
