@@ -10,6 +10,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
+    "iconv-lite": "latest",
     "morgan": "~1.9.0",
     "multer": "^1.4.1",
     "nconf": "^0.10.0",
@@ -17,6 +18,6 @@
     "pug": "2.0.0-beta11",
     "xlsx-to-json": "^0.3.0",
     "xlsx-to-json-lc": "^0.5.0",
-    "iconv-lite": "latest"
+    "xml2js": "^0.4.19"
   }
 }
