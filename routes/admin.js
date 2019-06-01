@@ -88,8 +88,8 @@ function JSONtoGrill(json, filename, res, ks) {
                 metadata = JSON.parse(metadata);
                 console.log(metadata);
                 const mp4Json = {
-                    "start-timestamp": element.Timestamp_inicio,
-                    "end-timestamp": element.Timestamp_final,
+                    "start-timestamp": element.Timestamp_inicio || 0,
+                    "end-timestamp": element.Timestamp_final || 0,
                     "subtitle": metadata.description || "",
                     "sources": [
                         {
@@ -101,9 +101,9 @@ function JSONtoGrill(json, filename, res, ks) {
                     "image": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/480/height/200",
                     "image-480x270": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/350/height/270",
                     "image-780x1200": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/780/height/1200",
-                    "title": metadata.name,
+                    "title": metadata.name || "",
                     "studio": "Campus Sur Radio",
-                    "duration": parseInt(metadata.duration),
+                    "duration": parseInt(metadata.duration) || 0,
                 };
                 grill.categories[0].videos.push(mp4Json);
 
