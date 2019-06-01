@@ -45,12 +45,28 @@ function xlsToJSON(filename, res) {
         if(err) {
             console.error(err);
         }else {
-            JSONtoGrill(result, filename, res);
+            startKalturaSession(result, filename, res);
         }
     });
 }
 
-function JSONtoGrill(json, filename, res) {
+function startKalturaSession(result, filename, res) {
+    http.get("http://iaas92-43.cesvima.upm.es/api_v3/service/session/action/start?partnerId=103&secret=84663d015be15d8bf0ce58d7de6c552d&format=1&expiry=10", (resp) => {
+        let data = '';
+        resp.on('data', (chunk) => {
+            data += chunk;
+        });
+        resp.on('end', () => {
+            const ks = data.replace(/"/g, '');
+            console.log("KS: ", ks);
+            JSONtoGrill(result, filename, res, ks);
+        });
+    }).on("error", (err) => {
+        console.log("Error: " + err.message);
+    });
+}
+
+function JSONtoGrill(json, filename, res, ks) {
     const grill = {
         "categories": [
             {
@@ -63,52 +79,49 @@ function JSONtoGrill(json, filename, res) {
     };
 
     json.forEach(function (element, i) {
-        http.get('http://iaas92-43.cesvima.upm.es/p/106/sp/0/playManifest/entryId/'+element.Nombre_del_archivo, (resp) => {
-            let data = '';
+        http.get("http://iaas92-43.cesvima.upm.es/api_v3/index.php?service=media&action=get&entryId="+element.Nombre_del_archivo+"&ks="+ks+"&format=1", (resp) => {
+            let metadata = '';
             resp.on('data', (chunk) => {
-                data += chunk;
+                metadata += chunk;
             });
             resp.on('end', () => {
-                parseString(data, function (err, result) {
-                    console.log(result);
-                    const mp4Json = {
-                        "start-timestamp": element.Timestamp_inicio,
-                        "end-timestamp": element.Timestamp_final,
-                        "subtitle": element.Subtitulo,
-                        "sources": [
-                            {
-                                "type": "mp4",
-                                "mime": "videos/mp4",
-                                "url": "/p/106/sp/0/playManifest/entryId/"+element.Nombre_del_archivo+"/format/url/flavorParamId/301951/video.mp4"
-                            }
-                        ],
-                        "image": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/480/height/200",
-                        "image-480x270": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/350/height/270",
-                        "image-780x1200": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/780/height/1200",
-                        "title": element.Titulo,
-                        "studio": element.Estudio,
-                        "duration": parseInt(result.manifest.duration),
-                    };
-                    grill.categories[0].videos.push(mp4Json);
-                    //console.log(mp4Json);
-
-                    const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
-
-                    try {
-                        if(!fs.existsSync('public/jsons/')){
-                            fs.mkdirSync('public/jsons/');
-                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
-                            fs.writeFileSync(path, str);
-                        } else {
-                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
-                            fs.writeFileSync(path, str);
+                metadata = JSON.parse(metadata);
+                console.log(metadata);
+                const mp4Json = {
+                    "start-timestamp": element.Timestamp_inicio,
+                    "end-timestamp": element.Timestamp_final,
+                    "subtitle": metadata.description || "",
+                    "sources": [
+                        {
+                            "type": "mp4",
+                            "mime": "videos/mp4",
+                            "url": "/p/106/sp/0/playManifest/entryId/"+element.Nombre_del_archivo+"/format/url/flavorParamId/301951/video.mp4"
                         }
-                    } catch (e) {
-                        console.log(e);
-                    }
-                });
-            });
+                    ],
+                    "image": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/480/height/200",
+                    "image-480x270": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/350/height/270",
+                    "image-780x1200": "/p/106/thumbnail/entry_id/"+element.Nombre_del_archivo+"/width/780/height/1200",
+                    "title": metadata.name,
+                    "studio": "Campus Sur Radio",
+                    "duration": parseInt(metadata.duration),
+                };
+                grill.categories[0].videos.push(mp4Json);
 
+                const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
+
+                try {
+                    if(!fs.existsSync('public/jsons/')){
+                        fs.mkdirSync('public/jsons/');
+                        const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
+                        fs.writeFileSync(path, str);
+                    } else {
+                        const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
+                        fs.writeFileSync(path, str);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            });
         }).on("error", (err) => {
             console.log("Error: " + err.message);
         });
