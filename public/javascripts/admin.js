@@ -16,7 +16,12 @@ $(function(){
             contentType: false,
             cache: false,
             success: function (data) {
-                alert("Se ha subido el archivo correctamente")
+                if(data.saved && !data.error){
+                    alert("El archivo se ha guardado correctamente");
+                } else {
+                    alert("No se ha podido guardar correctamente el archivo");
+                    console.log("Error: ", data.error);
+                }
             },
             error: function (e) {
                 alert("No se ha podido subir el archivo")

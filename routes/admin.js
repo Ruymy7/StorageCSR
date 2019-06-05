@@ -44,6 +44,7 @@ function xlsToJSON(filename, res) {
     }, function(err, result) {
         if(err) {
             console.error(err);
+            res.send({saved: false, error: err});
         }else {
             startKalturaSession(result, filename, res);
         }
@@ -58,15 +59,16 @@ function startKalturaSession(result, filename, res) {
         });
         resp.on('end', () => {
             const ks = data.replace(/"/g, '');
-            console.log("KS: ", ks);
             JSONtoGrill(result, filename, res, ks);
         });
     }).on("error", (err) => {
+        res.send({saved: false, error: err});
         console.log("Error: " + err.message);
     });
 }
 
 function JSONtoGrill(json, filename, res, ks) {
+    let saved = true;
     const grill = {
         "categories": [
             {
@@ -87,7 +89,6 @@ function JSONtoGrill(json, filename, res, ks) {
                 });
                 resp.on('end', () => {
                     metadata = JSON.parse(metadata);
-                    console.log(metadata);
                     const mp4Json = {
                         "start-timestamp": element.Timestamp_inicio || 0,
                         "end-timestamp": element.Timestamp_final || 0,
@@ -109,7 +110,6 @@ function JSONtoGrill(json, filename, res, ks) {
                     grill.categories[0].videos.push(mp4Json);
 
                     const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
-
                     try {
                         if (!fs.existsSync('public/jsons/')) {
                             fs.mkdirSync('public/jsons/');
@@ -121,13 +121,20 @@ function JSONtoGrill(json, filename, res, ks) {
                         }
                     } catch (e) {
                         console.log(e);
+                        saved = false;
+                        res.send({saved: false, error: e});
                     }
                 });
             }).on("error", (err) => {
                 console.log("Error: " + err.message);
+                res.send({saved: false, error: err});
+                saved = false;
             });
         }
     });
+    if(saved) {
+        res.send({saved: true});
+    }
 }
 
 // ---------------- POSTS ------------------
@@ -145,7 +152,6 @@ router.post('/pull', checkAdminToken, function (req, res, next) {
 
 router.post('/addgrill', checkAdminToken, xlsUpload.single('file'), function(req, res, next) {
     xlsToJSON(req.file.filename, res);
-    res.end();
 });
 
 // ---------------- GETS ------------------
@@ -157,4 +163,5 @@ router.get('/', function(req, res, next){
 router.get('/addgrill', function(req, res, next){
     res.render('admin', {title: "CSR Administración"});
 });
+
 module.exports = router;
