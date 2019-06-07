@@ -18,6 +18,14 @@ function checkAdminToken (req, res, next) {
     next();
 }
 
+function isSessionActive (req, res, next) {
+    if(req.session.userInfo){
+        next();
+    } else {
+        return res.status(400).json({error: "You must be logged in"})
+    }
+}
+
 const xlsStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         const xls = 'public/xls';
@@ -152,7 +160,7 @@ router.post('/pull', checkAdminToken, function (req, res, next) {
     });
 });
 
-router.post('/addgrill', checkAdminToken, xlsUpload.single('file'), function(req, res, next) {
+router.post('/addgrill', isSessionActive, xlsUpload.single('file'), function(req, res, next) {
     xlsToJSON(req.file.filename, res);
 });
 
