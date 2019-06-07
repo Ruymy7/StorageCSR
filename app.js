@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
     if(!req.session.userInfo && !String(req.path).includes('api') && req.path !== '/login' && req.method !== 'POST'){
         res.redirect('/login');
-    } else if(req.session.userInfo && req.path === '/login') {
+    } else if(req.session.userInfo && (req.path === '/login' || req.path === '/')) {
         res.redirect('/admin');
     } else {
         next();
