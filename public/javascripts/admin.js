@@ -28,4 +28,37 @@ $(function(){
             }
         });
     });
+
+    $(".logoutForm").submit(function (e) {
+        e.preventDefault();
+        $.post({
+            url: '/login/logout',
+            data: null,
+            success: function () {
+            }
+        });
+        window.location.href="/login"
+    });
+
+    let URLactual = (window.location.pathname).toString();
+    if(URLactual === '/login'){
+        $(".loginForm").submit(function (e) {
+            let data = {
+                user: $(this)[0][0].value,
+                password: $(this)[0][1].value
+            };
+            e.preventDefault();
+            $.post({
+                url: '/login',
+                data: data,
+                success: function (data) {
+                    if(data.valid){
+                        window.location.href="/index"
+                    } else {
+                        alert("Usuario o contraseña incorrectos")
+                    }
+                }
+            });
+        });
+    }
 });

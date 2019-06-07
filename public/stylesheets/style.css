@@ -25,8 +25,21 @@ a {
   padding-bottom: 50px;
 }
 
+.buttonHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
 .adminButton {
   text-align: center;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.logoutButton {
+  text-align: center;
+  padding: 5px;
+  font-weight: bold;
 }
 
 .uploadContainer {
@@ -43,4 +56,18 @@ a {
 }
 .uploadContainer button {
   margin: 10px;
+}
+
+.loginForm {
+  align-self: center;
+  align-items: center;
+  text-align: center;
+}
+
+.inputText {
+  margin: 3px;
+}
+
+.inputButton {
+  margin: 5px;
 }

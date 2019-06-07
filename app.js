@@ -5,10 +5,12 @@ const cookieParser  = require('cookie-parser');
 const logger        = require('morgan');
 const nconf         = require('nconf');
 const http          = require('http');
+const session       = require('express-session');
 
 nconf.file({ file: 'storage.conf'});
 
 // Declare routes
+const loginRouter = require('./routes/login');
 const indexRouter = require('./routes/index');
 const apiRouter   = require('./routes/api');
 const adminRouter = require('./routes/admin');
@@ -22,10 +24,21 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(session({ resave: false, saveUninitialized: false, secret: '123456789' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+// Path Handler
+app.use(function (req, res, next) {
+    if(!req.session.userInfo && !String(req.path).includes('api') && req.path !== '/login' && req.method !== 'POST'){
+        res.redirect('/login');
+    } else {
+        next();
+    }
+});
+
+app.use('/login', loginRouter);
+app.use('/index', indexRouter);
 app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
 

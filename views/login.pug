@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    form.loginForm(method='POST', action='/login')
+        input#user.inputText(type='text' placeholder="Usuario" name='user')
+        br
+        input#password.inputText(type='password' placeholder="Contraseña" name='password')
+        br
+        button(type='submit' class="inputButton") Iniciar sesión
