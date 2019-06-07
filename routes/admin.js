@@ -81,8 +81,8 @@ function JSONtoGrill(json, filename, res, ks) {
     };
 
     json.forEach(function (element, i) {
-        if(element.Nombre_del_archivo && element.Nombre_del_archivo !== '') {
-            http.get("http://iaas92-43.cesvima.upm.es/api_v3/index.php?service=media&action=get&entryId=" + element.Nombre_del_archivo + "&ks=" + ks + "&format=1", (resp) => {
+        if(element.ID && element.ID !== '') {
+            http.get("http://iaas92-43.cesvima.upm.es/api_v3/index.php?service=media&action=get&entryId=" + element.ID + "&ks=" + ks + "&format=1", (resp) => {
                 let metadata = '';
                 resp.on('data', (chunk) => {
                     metadata += chunk;
@@ -93,16 +93,18 @@ function JSONtoGrill(json, filename, res, ks) {
                         "start-timestamp": element.Timestamp_inicio || 0,
                         "end-timestamp": element.Timestamp_final || 0,
                         "subtitle": metadata.description || "",
+                        "day": element.Dia || null,
+                        "hour": element.Hora || null,
                         "sources": [
                             {
                                 "type": "mp4",
                                 "mime": "videos/mp4",
-                                "url": "/p/106/sp/0/playManifest/entryId/" + element.Nombre_del_archivo + "/format/url/flavorParamId/301951/video.mp4"
+                                "url": "/p/106/sp/0/playManifest/entryId/" + element.ID + "/format/url/flavorParamId/301951/video.mp4"
                             }
                         ],
-                        "image": "/p/106/thumbnail/entry_id/" + element.Nombre_del_archivo + "/width/480/height/200",
-                        "image-480x270": "/p/106/thumbnail/entry_id/" + element.Nombre_del_archivo + "/width/350/height/270",
-                        "image-780x1200": "/p/106/thumbnail/entry_id/" + element.Nombre_del_archivo + "/width/780/height/1200",
+                        "image": "/p/106/thumbnail/entry_id/" + element.ID + "/width/480/height/200",
+                        "image-480x270": "/p/106/thumbnail/entry_id/" + element.ID + "/width/350/height/270",
+                        "image-780x1200": "/p/106/thumbnail/entry_id/" + element.ID + "/width/780/height/1200",
                         "title": metadata.name || "",
                         "studio": "Campus Sur Radio",
                         "duration": parseInt(metadata.duration) || 0,
@@ -140,7 +142,7 @@ function JSONtoGrill(json, filename, res, ks) {
 // ---------------- POSTS ------------------
 
 router.post('/pull', checkAdminToken, function (req, res, next) {
-    exec('git stash && git pull && git stash apply && pm2 restart app', (error, stdout, stderr) => {
+    exec('git stash && git pull && git stash apply && pm2 restart StorageCSR', (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
             res.send('Error: ' + error);
