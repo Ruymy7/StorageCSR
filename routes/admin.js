@@ -159,11 +159,25 @@ router.post('/addgrill', checkAdminToken, xlsUpload.single('file'), function(req
 // ---------------- GETS ------------------
 
 router.get('/', function(req, res, next){
-    res.render('admin', {title: "CSR Administración"});
+    xlsActual = false;
+    xlsSiguiente = false;
+    const path = "public/xls/";
+
+    if(fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true;
+    if(fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true;
+
+    res.render('admin', {title: "CSR Administración", xlsActual: xlsActual, xlsSiguiente: xlsSiguiente});
 });
 
 router.get('/addgrill', function(req, res, next){
-    res.render('admin', {title: "CSR Administración"});
+    xlsActual = false;
+    xlsSiguiente = false;
+    const path = "public/xls/";
+
+    if(fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true;
+    if(fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true;
+
+    res.render('admin', {title: "CSR Administración", xlsActual: xlsActual, xlsSiguiente: xlsSiguiente});
 });
 
 module.exports = router;

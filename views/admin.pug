@@ -9,3 +9,19 @@ block content
         form#uploadFile(action='/admin/addgrill', method='post', enctype='multipart/form-data')
             input(type='file', name='file' required)
             input(type='submit')
+
+        br
+        a(href="semana_actual.xlsx") PLANTILLA de excel semana actual
+        br
+        br
+        a(href='semana_siguiente.xlsx') PLANTILLA de excel semana siguiente
+        br
+        br
+        br
+        br
+        if xlsActual
+            a(href="xls/semana_actual.xlsx") Parrilla en excel semana actual
+        br
+        br
+        if xlsSiguiente
+            a(href='xls/semana_siguiente.xlsx') Parrilla en excel semana siguiente
