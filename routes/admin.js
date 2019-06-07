@@ -7,7 +7,7 @@ const multer        = require('multer');
 const xlsxj         = require("xlsx-to-json");
 const iconvlite     = require('iconv-lite');
 const http          = require('http');
-const parseString   = require('xml2js').parseString;
+const CronJob       = require('cron').CronJob;
 
 function checkAdminToken (req, res, next) {
     const apiToken = nconf.get('adminToken');
@@ -187,5 +187,28 @@ router.get('/addgrill', function(req, res, next){
 
     res.render('admin', {title: "CSR Administración", xlsActual: xlsActual, xlsSiguiente: xlsSiguiente});
 });
+
+new CronJob('1 0 * * 1', function() { // Se ejecuta cada lunes a las 00:01 de manera que cada semana cambia la parrilla
+    const jsonPath = 'public/jsons/';
+    const xlsxPath = 'public/xls/';
+
+    // En caso de que no se incluya una parrilla de semana siguiente se seguirá usando la de semana actual de manera que no quede vacia la aplicación
+
+    if(fs.existsSync(jsonPath + 'semana_siguiente.json') && fs.existsSync(jsonPath + 'semana_actual.json')){ // Si existe el fichero de la semana siguiente se elimina el de la semana actual
+        // y se cambia el nombre del fichero semana_siguiente por el de semana_actual
+        fs.unlinkSync(jsonPath + 'semana_actual.json');
+        fs.renameSync(jsonPath + 'semana_siguiente.json', jsonPath + 'semana_actual.json');
+        fs.unlinkSync(xlsxPath + 'semana_actual.xlsx');
+        fs.renameSync(xlsxPath + 'semana_siguiente.xlsx', xlsxPath + 'semana_actual.xlsx');
+        console.log('All files renamed');
+    } else if(fs.existsSync(jsonPath + 'semana_siguiente.json')) { // En caso de que solo exista el de semana siguiente, lo renombramos a semana actual
+        fs.renameSync(jsonPath + 'semana_siguiente.json', jsonPath + 'semana_actual.json');
+        if(fs.existsSync(xlsxPath + 'semana_actual.xlsx')){
+            fs.unlinkSync(xlsxPath + 'semana_actual.xlsx');
+        }
+        fs.renameSync(xlsxPath + 'semana_siguiente.xlsx', xlsxPath + 'semana_actual.xlsx');
+        console.log('Only json files renamed');
+    }
+}, null, true);
 
 module.exports = router;
