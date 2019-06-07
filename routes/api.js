@@ -91,10 +91,7 @@ router.get('/', checkToken, function(req, res, next){
 
 
 router.get('/radioGrill', function (req, res, next) {
-    const date = new Date();
-    const mm = date.getMonth() < 10 ? "0" + (date.getMonth()+1) : date.getMonth();
-    const yyyy = date.getFullYear();
-    const path = "public/jsons/" + yyyy + "_" + mm + ".json";
+    const path = "public/jsons/semana_actual.json";
     try{
         if(fs.existsSync(path)){
             const json = fs.readFileSync(path);
