@@ -1,11 +1,7 @@
 extends layout
 
 block content
-  .buttonHeader
-    form(action='/admin')
-      input.adminButton(type='submit' value='Administración')
-    form.logoutForm()
-      input.logoutButton(type='submit' value="Cerrar sesión")
+  a(href="/admin") <-- Volver
   h1 API para enviar contenido a la Aplicación de Campus Sur Radio (Android)
   p
     | Es necesario incluir el apiToken en la cabecera de cada una de las llamadas POST a la API

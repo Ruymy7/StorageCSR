@@ -53,7 +53,7 @@ $(function(){
                 data: data,
                 success: function (data) {
                     if(data.valid){
-                        window.location.href="/index"
+                        window.location.href="/admin"
                     } else {
                         alert("Usuario o contraseña incorrectos")
                     }

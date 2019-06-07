@@ -1,7 +1,11 @@
 extends layout
 
 block content
-    a(href="/index") <-- Volver
+    .buttonHeader
+        form(action='/index')
+            input.adminButton(type='submit' value='API')
+        form.logoutForm()
+            input.logoutButton(type='submit' value="Cerrar sesión")
     h1 Subir un archivo con extensión .xlsx para la parrilla
     p El nombre del archivo debe seguir el formato semana_actual.xlsx ó semana_siguiente.xlsx
 
