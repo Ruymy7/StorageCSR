@@ -1,3 +1,9 @@
+/* 
+* StorageCSR (ETSISI-UPM)
+* Autor: Padrón Castañeda, Ruymán
+* Trabajo Fin de Grado
+*/
+
 const express       = require('express');
 const router        = express.Router();
 const fs            = require('fs');
@@ -9,6 +15,7 @@ const iconvlite     = require('iconv-lite');
 const http          = require('http');
 const CronJob       = require('cron').CronJob;
 
+/* Comprueba si el token es correcto antes de ejecutar la siguiente acción */
 function checkAdminToken (req, res, next) {
     const apiToken = nconf.get('adminToken');
     const token = req.get('token');
@@ -18,6 +25,7 @@ function checkAdminToken (req, res, next) {
     next();
 }
 
+/* Comprueba si la sesión esta iniciada antes de seguir con lo demás */
 function isSessionActive (req, res, next) {
     if(req.session.userInfo){
         next();
@@ -26,6 +34,7 @@ function isSessionActive (req, res, next) {
     }
 }
 
+/* Multer para subir los ficheros xlsx de la parrilla */
 const xlsStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         const xls = 'public/xls';
@@ -43,6 +52,7 @@ const xlsUpload = multer({
     storage: xlsStorage
 });
 
+/* Función que convierte los ficheros xlsx de la parrilla a json para luego tratarlos */
 function xlsToJSON(filename, res) {
     const path = 'public/xls/'+filename;
     xlsxj({
@@ -59,6 +69,7 @@ function xlsToJSON(filename, res) {
     });
 }
 
+/* Crea una sesión en el servidor de Kaltura que dura 10s para obtener los metadatos (título, subtítulo...) de los vídeos y audios de la parrilla */
 function startKalturaSession(result, filename, res) {
     http.get("http://iaas92-43.cesvima.upm.es/api_v3/service/session/action/start?partnerId=103&secret=84663d015be15d8bf0ce58d7de6c552d&format=1&expiry=10", (resp) => {
         let data = '';
@@ -67,7 +78,7 @@ function startKalturaSession(result, filename, res) {
         });
         resp.on('end', () => {
             const ks = data.replace(/"/g, '');
-            JSONtoGrill(result, filename, res, ks);
+            JSONtoGrill(result, filename, res, ks); // Una vez obtenida la sesión se crea la parrilla con los datos de cada medio
         });
     }).on("error", (err) => {
         res.send({saved: false, error: err});
@@ -75,6 +86,7 @@ function startKalturaSession(result, filename, res) {
     });
 }
 
+/* Función que crea el json que se almacenará y luego se enviará a la aplicación móvil */
 function JSONtoGrill(json, filename, res, ks) {
     let saved = true;
     const grill = {
@@ -90,6 +102,7 @@ function JSONtoGrill(json, filename, res, ks) {
 
     json.forEach(function (element, i) {
         if(element.ID && element.ID !== '') {
+            // Se obtienen los metadatos de cada podcast uno a uno usando la API de Kaltura
             http.get("http://iaas92-43.cesvima.upm.es/api_v3/index.php?service=media&action=get&entryId=" + element.ID + "&ks=" + ks + "&format=1", (resp) => {
                 let metadata = '';
                 resp.on('data', (chunk) => {
@@ -97,6 +110,7 @@ function JSONtoGrill(json, filename, res, ks) {
                 });
                 resp.on('end', () => {
                     metadata = JSON.parse(metadata);
+                    // Aquí se rellenan los metadatos de cada podcast con los obtenidos en Kaltura además de los introducidos en el fichero xlsx
                     const mp4Json = {
                         "start-timestamp": element.Timestamp_inicio || 0,
                         "end-timestamp": element.Timestamp_final || 0,
@@ -121,27 +135,31 @@ function JSONtoGrill(json, filename, res, ks) {
 
                     const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
                     try {
+                        // Si aun no existe el directorio /jsons debe crearse antes de guardar el archivo de la parrilla
                         if (!fs.existsSync('public/jsons/')) {
                             fs.mkdirSync('public/jsons/');
-                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
+                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
                             fs.writeFileSync(path, str);
                         } else {
-                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1');
+                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
                             fs.writeFileSync(path, str);
                         }
                     } catch (e) {
                         console.log(e);
+                        // Si se produce algún error se notifica al front para que muestre una alerta
                         saved = false;
                         res.send({saved: false, error: e});
                     }
                 });
             }).on("error", (err) => {
                 console.log("Error: " + err.message);
+                // Si se produce algún error se notifica al front para que muestre una alerta
                 res.send({saved: false, error: err});
                 saved = false;
             });
         }
     });
+    // En caso de que se haya guardado correctamente el archivo se notifica al front para que muestre la alerta
     if(saved) {
         res.send({saved: true});
     }
@@ -149,7 +167,10 @@ function JSONtoGrill(json, filename, res, ks) {
 
 // ---------------- POSTS ------------------
 
+/* POST para descargar los cambios de GitHub y reiniciar el servidor para que se apliquen */
+// Antes de realizar lo definido en el interior debe comprobar que la llamada incluye el token de administrador
 router.post('/pull', checkAdminToken, function (req, res, next) {
+    // Se usa en el servidor de producción, de esta manera no es necesario acceder por SSH u otro método para descargar los cambios
     exec('git stash && git pull && git stash apply && pm2 restart StorageCSR', (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
@@ -160,34 +181,33 @@ router.post('/pull', checkAdminToken, function (req, res, next) {
     });
 });
 
+/* POST para añadir la parrilla de radio */
+// Antes de guardar el archivo se debe comprobar si la sesión está iniciada para evitar que se suban archivos sin permiso
 router.post('/addgrill', isSessionActive, xlsUpload.single('file'), function(req, res, next) {
-    xlsToJSON(req.file.filename, res);
+    xlsToJSON(req.file.filename, res); // Llamada a función que transforma el xlsx a json
 });
 
 // ---------------- GETS ------------------
 
+/* GET que muestra la página principal de administración */
 router.get('/', function(req, res, next){
     xlsActual = false;
     xlsSiguiente = false;
     const path = "public/xls/";
-
+    
+    // Comprobamos si hay parrilla de semana actual y semana siguiente guardadas en el servidor para luego mostrarlo en el front
     if(fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true;
     if(fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true;
 
     res.render('admin', {title: "CSR Administración", xlsActual: xlsActual, xlsSiguiente: xlsSiguiente});
 });
+
 
 router.get('/addgrill', function(req, res, next){
-    xlsActual = false;
-    xlsSiguiente = false;
-    const path = "public/xls/";
-
-    if(fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true;
-    if(fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true;
-
-    res.render('admin', {title: "CSR Administración", xlsActual: xlsActual, xlsSiguiente: xlsSiguiente});
+    res.redirect('/');
 });
 
+/* Cron que cambia la parrilla cada semana */
 new CronJob('1 0 * * 1', function() { // Se ejecuta cada lunes a las 00:01 de manera que cada semana cambia la parrilla
     const jsonPath = 'public/jsons/';
     const xlsxPath = 'public/xls/';

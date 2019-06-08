@@ -1,4 +1,11 @@
+/* 
+* StorageCSR (ETSISI-UPM)
+* Autor: Padrón Castañeda, Ruymán
+* Trabajo Fin de Grado
+*/
+
 $(function(){
+    // Al hacer click en subir archivo
     $("#uploadFile").submit(function(e){
         e.preventDefault();
         var form = $(this);
@@ -7,6 +14,7 @@ $(function(){
         var formData = new FormData();
         formData.append("file", form[0][0].files[0], form[0][0].files[0].name);
 
+        // Hacer el POST al back enviando el dichero excel que contiene la parrilla
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
@@ -16,9 +24,9 @@ $(function(){
             contentType: false,
             cache: false,
             success: function (data) {
-                if(data.saved && !data.error){
+                if(data.saved && !data.error){ // Mostrar alerta de error
                     alert("El archivo se ha guardado correctamente");
-                } else {
+                } else { // Mostrar alerta de guardado correctamente
                     alert("No se ha podido guardar correctamente el archivo");
                     console.log("Error: ", data.error);
                 }
@@ -29,6 +37,7 @@ $(function(){
         });
     });
 
+    // Funcion que hace logout al pulsar cerrar sesión
     $(".logoutForm").submit(function (e) {
         e.preventDefault();
         $.post({
@@ -37,11 +46,12 @@ $(function(){
             success: function () {
             }
         });
-        window.location.href="/login"
+        window.location.href="/login" // Redirige al login
     });
 
     let URLactual = (window.location.pathname).toString();
     if(URLactual === '/login'){
+        // Se envia el usuario y contraseña al back para comprobar que son correctos e iniciar sesión
         $(".loginForm").submit(function (e) {
             let data = {
                 user: $(this)[0][0].value,
