@@ -92,3 +92,5 @@ public/audios/
 public/videos/
 
 users.json
+
+ecosystem.config.js
