@@ -86,3 +86,9 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+public/jsons/
+public/xls/
+public/audios/
+public/videos/
+
+users.json

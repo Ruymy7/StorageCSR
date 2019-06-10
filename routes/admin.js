@@ -110,6 +110,8 @@ function JSONtoGrill(json, filename, res, ks) {
                 });
                 resp.on('end', () => {
                     metadata = JSON.parse(metadata);
+                    let mediaType = metadata.mediaType == 1 ? "videos/mp4" : "audio/mp3" // Como se indica en la API de Kaltura, si el mediatype es == 1
+                                                                                         // corresponde con un vídeo, en cambio si es == 5 corresponde a un audio
                     // Aquí se rellenan los metadatos de cada podcast con los obtenidos en Kaltura además de los introducidos en el fichero xlsx
                     const mp4Json = {
                         "start-timestamp": element.Timestamp_inicio || 0,
@@ -120,7 +122,7 @@ function JSONtoGrill(json, filename, res, ks) {
                         "sources": [
                             {
                                 "type": "mp4",
-                                "mime": "videos/mp4",
+                                "mime": mediaType,
                                 "url": "/p/106/sp/0/playManifest/entryId/" + element.ID + "/format/url/flavorParamId/301951/video.mp4"
                             }
                         ],
