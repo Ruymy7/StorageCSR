@@ -114,8 +114,6 @@ function JSONtoGrill(json, filename, res, ks) {
                                                                                          // corresponde con un vídeo, en cambio si es == 5 corresponde a un audio
                     // Aquí se rellenan los metadatos de cada podcast con los obtenidos en Kaltura además de los introducidos en el fichero xlsx
                     const mp4Json = {
-                        "start-timestamp": element.Timestamp_inicio || 0,
-                        "end-timestamp": element.Timestamp_final || 0,
                         "subtitle": metadata.description || "",
                         "day": element.Dia || null,
                         "hour": element.Hora || null,
