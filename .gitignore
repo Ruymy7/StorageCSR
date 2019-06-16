@@ -90,7 +90,9 @@ public/jsons/
 public/xls/
 public/audios/
 public/videos/
+public/apk/
 
 users.json
 
 ecosystem.config.js
+workspace.xml
