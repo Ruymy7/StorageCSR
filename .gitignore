@@ -93,6 +93,8 @@ public/videos/
 public/apk/
 public/images/
 
+storage.conf
+nodemon.json
 users.json
 
 ecosystem.config.js
