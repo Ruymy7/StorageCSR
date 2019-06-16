@@ -91,7 +91,6 @@ public/xls/
 public/audios/
 public/videos/
 public/apk/
-public/images/
 
 storage.conf
 nodemon.json
