@@ -1,3 +1,5 @@
+<h2> Trabajo de Fin de Grado <br> Ruymán Padrón Castañeda <br> <h3> ETSISI (UPM) <h3> <h2>
+
 <h1>API para enviar contenido a la Aplicación de Campus Sur Radio (Android)</h1>
 <p> Es necesario incluir el apiToken en la cabecera de cada una de las llamadas POST a la API</p>
 <p><b>token: "secret-token"</b><br><br>Puedes comprobar tu token con GET: '/api'</p> <br>
