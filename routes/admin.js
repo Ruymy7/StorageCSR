@@ -71,7 +71,7 @@ function xlsToJSON(filename, res) {
 
 /* Crea una sesión en el servidor de Kaltura que dura 10s para obtener los metadatos (título, subtítulo...) de los vídeos y audios de la parrilla */
 function startKalturaSession(result, filename, res) {
-    http.get("http://iaas92-43.cesvima.upm.es/api_v3/service/session/action/start?partnerId=103&secret=84663d015be15d8bf0ce58d7de6c552d&format=1&expiry=10", (resp) => {
+    http.get("http://iaas92-43.cesvima.upm.es/api_v3/service/session/action/start?partnerId=103&secret=<kalturaSecret>&format=1&expiry=10", (resp) => {
         let data = '';
         resp.on('data', (chunk) => {
             data += chunk;
